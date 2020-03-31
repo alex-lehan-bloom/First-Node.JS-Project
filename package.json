@@ -1,0 +1,20 @@
+{
+  "name": "node.js-project",
+  "version": "1.0.0",
+  "description": "Node.JS project for ITC",
+  "main": "app.js",
+  "scripts": {
+    "dev": "nodemon app",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Alex Bloom",
+  "license": "ISC",
+  "dependencies": {
+    "es6-promise": "^4.2.8",
+    "express": "^4.17.1",
+    "isomorphic-fetch": "^2.2.1"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.2"
+  }
+}
