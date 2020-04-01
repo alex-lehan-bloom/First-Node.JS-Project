@@ -12,7 +12,8 @@
   "dependencies": {
     "es6-promise": "^4.2.8",
     "express": "^4.17.1",
-    "isomorphic-fetch": "^2.2.1"
+    "isomorphic-fetch": "^2.2.1",
+    "mongodb": "^3.5.5"
   },
   "devDependencies": {
     "nodemon": "^2.0.2"

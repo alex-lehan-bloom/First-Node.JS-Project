@@ -2,8 +2,19 @@ const express = require("express");
 require("es6-promise").polyfill();
 const fetch = require("isomorphic-fetch");
 const router = express.Router();
+const moment = require("moment");
+const mongo = require("mongodb").MongoClient;
 
-let query;
+let mongoDb;
+let searchCollectionName = "search";
+
+// Connect to the db
+mongo.connect(`mongodb://localhost:27017/NodeProjectDB`, (err, client) => {
+  if (!err) {
+    console.log("Connected successfully to db");
+  }
+  mongoDb = client.db("NodeProject");
+});
 
 router.get("/", (req, res) => {
   query = req.query.query;
@@ -34,7 +45,25 @@ async function getAllSearchResults() {
     return getSingleCompanyProfile(company.symbol);
   });
   let allCompanyProfiles = await Promise.all(getCompanyProfile);
+  console.log(allCompanyProfiles);
+  mongoDb.collection(searchCollectionName, (err, collection) => {
+    console.log(allCompanyProfiles);
+    collection
+      .insertOne({
+        date: moment().format(),
+        searchResults: [{ name: "alex", email: "lehan" }]
+        // searchResults: allCompanyProfiles
+      })
+      .then(console.log("Added document to db Successfully"));
+  });
+
   return allCompanyProfiles;
 }
 
 module.exports = router;
+
+// mongoDb.collection(searchCollectionName, (err, collection) => {
+//   collection.find().toArray(function(err, items) {
+//     console.log(items);
+//   });
+// });
