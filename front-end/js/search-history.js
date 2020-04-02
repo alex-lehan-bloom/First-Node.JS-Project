@@ -21,6 +21,19 @@ function displaySearchHistory(searchHistory) {
     let a = document.createElement("a");
     a.href = `index.html?query=${previousSearch.query}`;
     a.append(li);
-    ul.append(a);
+    let button = document.createElement("button");
+    button.classList.add("btn", "btn-primary");
+    button.textContent = "Delete";
+    ul.append(a, button);
+    deleteButton(button, previousSearch._id);
   }
+}
+
+function deleteButton(button, searchId) {
+  button.addEventListener("click", async () => {
+    console.log("inside listener");
+    let response = await fetch(`http://localhost/search-history/${searchId}`);
+    let itemDeleted = await response.json();
+    console.log(itemDeleted);
+  });
 }

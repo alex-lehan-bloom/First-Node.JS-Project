@@ -14,6 +14,10 @@ app.use(cors());
 app.engine("handlebars", exphbs());
 app.set("view engine", "handlebars");
 
+// Body parser
+app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
+
 //Render homepage
 app.get("/", (req, res) => res.render("index", { title: "Search Nasdaq" }));
 
