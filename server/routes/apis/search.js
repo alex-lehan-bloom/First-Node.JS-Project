@@ -1,7 +1,6 @@
 const express = require("express");
-require("es6-promise").polyfill();
-const fetch = require("isomorphic-fetch");
 const router = express.Router();
+const fetch = require("isomorphic-fetch");
 const moment = require("moment");
 const mongo = require("mongodb").MongoClient;
 
@@ -16,14 +15,13 @@ mongo.connect(`mongodb://localhost:27017/NodeProjectDB`, (err, client) => {
   mongoDb = client.db("NodeProject");
 });
 
-router.get("/", (req, res) => {
-  query = req.query.query;
-  getAllSearchResults().then(allCompanyProfiles => {
-    res.json(allCompanyProfiles);
-  });
+router.get("/", async (req, res) => {
+  const query = req.query.query;
+  const allCompanyProfiles = await getAllSearchResults(query);
+  res.json(allCompanyProfiles);
 });
 
-async function search() {
+async function search(query) {
   let response = await fetch(
     `https://financialmodelingprep.com/api/v3/search?query=${query}&limit=10&exchange=NASDAQ`
   );
@@ -39,31 +37,21 @@ async function getSingleCompanyProfile(symbol) {
   return data;
 }
 
-async function getAllSearchResults() {
-  let companies = await search();
+async function getAllSearchResults(query) {
+  let companies = await search(query);
   let getCompanyProfile = companies.map(company => {
     return getSingleCompanyProfile(company.symbol);
   });
   let allCompanyProfiles = await Promise.all(getCompanyProfile);
-  console.log(allCompanyProfiles);
   mongoDb.collection(searchCollectionName, (err, collection) => {
-    console.log(allCompanyProfiles);
     collection
       .insertOne({
         date: moment().format(),
-        searchResults: [{ name: "alex", email: "lehan" }]
-        // searchResults: allCompanyProfiles
+        searchResults: allCompanyProfiles
       })
       .then(console.log("Added document to db Successfully"));
   });
-
   return allCompanyProfiles;
 }
 
 module.exports = router;
-
-// mongoDb.collection(searchCollectionName, (err, collection) => {
-//   collection.find().toArray(function(err, items) {
-//     console.log(items);
-//   });
-// });
