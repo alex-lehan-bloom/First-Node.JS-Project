@@ -1,17 +1,21 @@
 const express = require("express");
 const exphbs = require("express-handlebars");
+const cors = require("cors");
 const logger = require("./logger/logger");
 
 app = express();
 
 app.use(logger);
 
+app.options("*", cors()); // include before other routes
+app.use(cors());
+
 //Handlebars
 app.engine("handlebars", exphbs());
 app.set("view engine", "handlebars");
 
 //Render homepage
-app.get("/", (req, res) => res.render("index", {title: "Search Nasdaq"}));
+app.get("/", (req, res) => res.render("index", { title: "Search Nasdaq" }));
 
 app.use("/search", require("./routes/apis/search"));
 

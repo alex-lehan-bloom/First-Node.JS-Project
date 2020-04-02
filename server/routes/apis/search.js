@@ -47,6 +47,7 @@ async function getAllSearchResults(query) {
     collection
       .insertOne({
         date: moment().format(),
+        query: query,
         searchResults: allCompanyProfiles
       })
       .then(console.log("Added document to db Successfully"));

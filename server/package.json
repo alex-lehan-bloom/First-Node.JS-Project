@@ -10,6 +10,7 @@
   "author": "Alex Bloom",
   "license": "ISC",
   "dependencies": {
+    "cors": "^2.8.5",
     "es6-promise": "^4.2.8",
     "express": "^4.17.1",
     "express-handlebars": "^4.0.0",
